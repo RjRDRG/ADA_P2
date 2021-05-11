@@ -1,45 +1,47 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws NumberFormatException, IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String[] line;
 
-        int nchilds = Integer.parseInt(in.readLine());
+        line = in.readLine().split(" ");
+        int nlocations = Integer.parseInt(line[0]);
+        int nconnections = Integer.parseInt(line[1]);
 
-        List<Integer>[] sticks = new List[nchilds];
+        List<Integer>[] adjacencies = new List[nlocations];
 
-        for(int i=0; i<nchilds; i++) {
-            String[] line = in.readLine().split(" ");;
-            int nsticks = Integer.parseInt(line[0]);
-            sticks[i] = new ArrayList<>(nsticks);
-            for(int j=1; j<=nsticks; j++) {
-                sticks[i].add(Integer.parseInt(line[j]));
-            }
+        for(int i=0; i<nconnections; i++) {
+            line = in.readLine().split(" ");
+            int location0 = Integer.parseInt(line[0]);
+            int location1 = Integer.parseInt(line[1]);
+
+            if(adjacencies[location0] == null)
+                adjacencies[location0] = new ArrayList<>();
+
+            if(adjacencies[location1] == null)
+                adjacencies[location1] = new ArrayList<>();
+
+            adjacencies[location0].add(location1);
+            adjacencies[location1].add(location0);
         }
 
-        Integer max = null;
+        int nsick = Integer.parseInt(in.readLine());
 
-        for(List<Integer> list : sticks) {
-            for(Integer stick : list) {
-                if(max == null || stick > max)
-                    max = stick;
-            }
+        Map<Integer,Integer> sick = new HashMap<>();
+
+        for (int i=0; i<nsick; i++) {
+            line = in.readLine().split(" ");
+            int home = Integer.parseInt(line[0]);
+            int distance = Integer.parseInt(line[1]);
+            sick.put(home,distance);
         }
 
-        System.out.println(max);
+
     }
 }
-
-/*
-4
-3 5 12 2
-0
-3 25 5 17
-5 2 4 2 10 21
- */
