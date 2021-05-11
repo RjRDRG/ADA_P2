@@ -42,6 +42,16 @@ public class Main {
             sick.put(home,distance);
         }
 
+        Set<Integer> perilousLocations = new Legionellosis(adjacencies,sick).solve();
+
+        StringJoiner joiner = new StringJoiner(" ");
+        joiner.add("01").add("02").add("03");
+
+        for (Integer location: perilousLocations) {
+            joiner.add(location.toString());
+        }
+
+        System.out.println(joiner);
 
     }
 }
