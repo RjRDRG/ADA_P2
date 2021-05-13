@@ -2,48 +2,49 @@ import java.util.*;
 
 public class Legionellosis {
 
-    List<Integer>[] adjacencies;
-    Map<Integer,Integer> sick;
+    final Set<Integer>[] adjacencies;
+    final Location[] sick;
     final int nsick;
+    final int nlocations;
 
-    public Legionellosis(List<Integer>[] adjacencies, Map<Integer,Integer> sick, int nsick) {
+    public Legionellosis(Set<Integer>[] adjacencies, Location[] sick, int nlocations) {
         this.adjacencies = adjacencies;
         this.sick = sick;
-        this.nsick = nsick;
+        this.nsick = sick.length;
+        this.nlocations = nlocations;
     }
 
     Set<Integer> solve() {
-        int[] sickCounter = new int[adjacencies.length];
+        int[] sickCounter = new int[nlocations];
         Set<Integer> perilousLocations = new HashSet<>();
 
-        for(Map.Entry<Integer,Integer> entry: sick.entrySet()){
-            Queue<RelativeLocation> frontier = new LinkedList<>();
+        for(Location location: sick){
+            UniqueQueue<Location> frontier = new UniqueQueue<>();
             Set<Integer> explored = new HashSet<>();
 
-            int home = entry.getKey();
-            int maxDistance = entry.getValue();
+            int home = location.index;
+            int maxDistance = location.distance;
 
-            frontier.add(new RelativeLocation(home,0));
-            explored.add(home);
+            frontier.add(new Location(home,0));
 
             while (!frontier.isEmpty()) {
-                RelativeLocation currentLocation = frontier.poll();
+                Location currentLocation = frontier.poll();
+                explored.add(currentLocation.index);
 
                 sickCounter[currentLocation.index] += 1;
 
                 if (sickCounter[currentLocation.index]==nsick)
                     perilousLocations.add(currentLocation.index);
 
-                for (Integer adj : adjacencies[currentLocation.index]) {
-                    int newDistance = currentLocation.distance+1;
-                    if(newDistance <= maxDistance && !explored.contains(adj)) {
-                        frontier.add(new RelativeLocation(adj, newDistance));
-                        explored.add(adj);
+                if(adjacencies[currentLocation.index]!=null)
+                    for (Integer adj : adjacencies[currentLocation.index]) {
+                        int newDistance = currentLocation.distance+1;
+                        if(newDistance <= maxDistance && !explored.contains(adj)) {
+                            frontier.add(new Location(adj, newDistance));
+                        }
                     }
-                }
             }
         }
-
 
         return perilousLocations;
     }

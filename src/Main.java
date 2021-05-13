@@ -14,7 +14,12 @@ public class Main {
         int nlocations = Integer.parseInt(line[0]);
         int nconnections = Integer.parseInt(line[1]);
 
-        List<Integer>[] adjacencies = new List[nlocations];
+        @SuppressWarnings("unchecked")
+        Set<Integer>[] adjacencies = new Set[nlocations];
+
+        if(nconnections==0) {
+            adjacencies[0] = new HashSet<>();
+        }
 
         for(int i=0; i<nconnections; i++) {
             line = in.readLine().split(" ");
@@ -22,10 +27,10 @@ public class Main {
             int location1 = Integer.parseInt(line[1])-1;
 
             if(adjacencies[location0] == null)
-                adjacencies[location0] = new ArrayList<>();
+                adjacencies[location0] = new HashSet<>();
 
             if(adjacencies[location1] == null)
-                adjacencies[location1] = new ArrayList<>();
+                adjacencies[location1] = new HashSet<>();
 
             adjacencies[location0].add(location1);
             adjacencies[location1].add(location0);
@@ -33,16 +38,16 @@ public class Main {
 
         final int nsick = Integer.parseInt(in.readLine());
 
-        Map<Integer,Integer> sick = new HashMap<>();
+       Location[] sick = new Location[nsick];
 
         for (int i=0; i<nsick; i++) {
             line = in.readLine().split(" ");
             int home = Integer.parseInt(line[0])-1;
             int distance = Integer.parseInt(line[1]);
-            sick.put(home,distance);
+            sick[i] = new Location(home,distance);
         }
 
-        Set<Integer> perilousLocations = new Legionellosis(adjacencies,sick,nsick).solve();
+        Set<Integer> perilousLocations = new Legionellosis(adjacencies,sick,nlocations).solve();
 
         if(perilousLocations.isEmpty())
             System.out.println(0);
@@ -83,27 +88,31 @@ public class Main {
 6 2
 11 3
 
-5 5
-1 2
-2 3
-3 4
-4 5
-5 1
-2
-1 1
-4 2
-
+16 20
+6 8
+8 6
+7 3
+16 15
+12 14
+13 12
+2 1
+13 15
+11 12
+6 2
+2 6
+10 11
+4 7
 5 6
 1 5
-5 4
-4 3
+3 4
 3 2
-2 1
-1 3
+9 10
+9 8
+8 7
 3
-1 2
-2 3
-3 1
+3 3
+6 2
+11 3
 
 16 18
 15 16
@@ -128,5 +137,55 @@ public class Main {
 6 2
 11 1
 3 3
+
+3 2
+1 2
+2 3
+3
+1 10
+1 2
+1 5
+
+2 1
+1 2
+2
+1 1
+2 1
+
+3 2
+1 2
+2 3
+3
+1 10
+1 2
+1 5
+
+1 3
+1 1
+1 1
+1 1
+1
+1 1
+
+3 2
+3 2
+2 3
+3
+1 1
+1 1
+1 1
+
+3 2
+2 3
+3 2
+1
+1 1
+
+5 2
+1 4
+5 4
+2
+1 5
+5 10
 
  */
