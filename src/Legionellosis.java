@@ -16,7 +16,7 @@ public class Legionellosis {
 
     Set<Integer> solve() {
         int[] sickCounter = new int[nlocations];
-        Set<Integer> perilousLocations = new HashSet<>();
+        SortedSet<Integer> perilousLocations = new TreeSet<>();
 
         for(Location location: sick){
             UniqueQueue<Location> frontier = new UniqueQueue<>();
